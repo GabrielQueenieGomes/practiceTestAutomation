@@ -3,10 +3,12 @@ package com.cucumber.bdd.login;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.After;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class stepDef {
@@ -15,8 +17,14 @@ WebDriver driver;
 	@Given("open chrome")
 	public void open_chrome() {
 		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
+
+	    ChromeOptions options = new ChromeOptions();
+	    options.addArguments("--headless=new");
+	    options.addArguments("--no-sandbox");
+	    options.addArguments("--disable-dev-shm-usage");
+	    options.addArguments("--window-size=1920,1080");
+
+	    driver = new ChromeDriver(options);
 	}
 
 	@Given("go to app link")
@@ -65,7 +73,14 @@ WebDriver driver;
 		} catch (Exception e) {
 			
 		}
-	    driver.quit();
+
+	}
+
+	@After
+	public void tearDown() {
+	    if (driver != null) {
+	        driver.quit();
+	    }
 	}
 
 }
